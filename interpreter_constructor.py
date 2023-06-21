@@ -2,7 +2,7 @@ import numpy as np
 import ipdb
 class Interpreter:
     
-    def __init__(self, data, model, idx_list, subset='test',use_bias=True) -> None:
+    def __init__(self, data, model, idx_list, subset='test',DGpe1993=True) -> None:
         self.name = data.name
         self.train = data.train
         self.test = data.test
@@ -24,14 +24,10 @@ class Interpreter:
         z = [r for r in self.z_terms.values()]
         z = np.array(z)
         z = np.abs(z)
-        # z_min = np.ones_like(z)*self.z_range[0]
-        # z_max = np.ones_like(z)*self.z_range[1]
-        # z_norm = (z - z_min)/(z_max-z_min)
-        # z_mean = np.mean(z_norm,axis=(1,2)) 
         if(z[0].shape[-1]!=self.n_feats):
             z = np.repeat(z,self.n_feats,axis=-1)
-        
-        sparsity = np.sum(z>0.01,axis=(1,2))/(self.n_feats*self.n_timesteps)
+
+        sparsity = np.sum(z>0.1,axis=(1,2))/(self.n_feats*self.n_timesteps)
         return np.mean(sparsity)
         
 
